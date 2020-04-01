@@ -1,8 +1,10 @@
-package com.TD3.bateau;
+package com.TD3.bateau.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.TD3.bateau.R;
 
 public class MainActivity extends AppCompatActivity {
 
