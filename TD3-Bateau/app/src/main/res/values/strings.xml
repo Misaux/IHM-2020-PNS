@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Bateau</string>
+    <string name="photo">ajouter une photo</string>
+    <string name="new_post">nouvelle publication</string>
+    <string name="images_to_post">images to post</string>
+    <string name="titre">Titre</string>
+    <string name="detail">Détail</string>
 </resources>
