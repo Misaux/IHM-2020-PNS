@@ -34,7 +34,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        /*LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -46,7 +46,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Location locationNet = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Location locationNet = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);*/
 
 
         IMapController mapController;
