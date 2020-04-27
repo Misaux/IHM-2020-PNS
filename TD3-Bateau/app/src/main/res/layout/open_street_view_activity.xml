@@ -27,6 +27,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:background="#D5D5D5"
                             app:srcCompat="@android:drawable/ic_dialog_map" />
 
                         <ImageButton
@@ -34,6 +35,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:background="#D5D5D5"
                             app:srcCompat="@android:drawable/ic_dialog_info" />
 
                         <ImageButton
@@ -42,7 +44,8 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="right"
                             android:layout_weight="1"
-                            android:onClick="switchActivity"
+                            android:background="#D5D5D5"
+                            android:onClick="buttonClick"
                             app:srcCompat="@drawable/zoom_in" />
                 </LinearLayout>
         </FrameLayout>

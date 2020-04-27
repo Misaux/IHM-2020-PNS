@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 
 import com.TD3.bateau.R;
 
+import java.util.Objects;
+
 public class NewPostActivity extends Activity
 {
     private static final int CAMERA_REQUEST = 1888;
@@ -27,7 +29,7 @@ public class NewPostActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_post_layout);
         this.imageView = this.findViewById(R.id.imageView1);
-        Button photoButton = this.findViewById(R.id.button1);
+        Button photoButton = this.findViewById(R.id.addPhoto);
         photoButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -70,8 +72,9 @@ public class NewPostActivity extends Activity
     {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
         {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             imageView.setImageBitmap(photo);
+            ((Button)findViewById(R.id.addPhoto)).setText("Remplacer la photo");
         }
     }
 }

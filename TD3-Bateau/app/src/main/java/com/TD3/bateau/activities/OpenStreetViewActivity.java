@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -43,7 +44,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
     private MapView map;
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MyLocationNewOverlay mLocationOverlay;
-    private CompassOverlay mCompassOverlay;
+    private boolean newPostLocFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +86,6 @@ public class OpenStreetViewActivity extends AppCompatActivity {
 
         mapController = map.getController();
         mapController.setZoom(18.0);
-        GeoPoint startPoint = new GeoPoint(43.65020, 7.00517);
-        mapController.setCenter(startPoint);
 
         requestPermissionsIfNecessary(new String[] {
                 // if you need to show the current location, uncomment the line below
@@ -97,6 +96,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
 
         this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()),map);
         this.mLocationOverlay.enableMyLocation();
+        this.mLocationOverlay.enableFollowLocation();
         map.getOverlays().add(this.mLocationOverlay);
 
         /*this.mCompassOverlay = new CompassOverlay(getApplicationContext(), new InternalCompassOrientationProvider(getApplicationContext()), map);
@@ -129,8 +129,13 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                Toast.makeText(getBaseContext(),p.getLatitude() + " - "+p.getLongitude(),Toast.LENGTH_LONG).show();
-
+                //Toast.makeText(getBaseContext(),p.getLatitude() + " - "+p.getLongitude(),Toast.LENGTH_LONG).show();
+                if (newPostLocFlag) {
+                    Intent intent = new Intent(getApplicationContext(), NewPostActivity.class);
+                    intent.putExtra("lat", p.getLatitude());
+                    intent.putExtra("lon", p.getLongitude());
+                    startActivity(intent);
+                }
                 return false;
             }
 
@@ -146,6 +151,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
 
         mOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(mOverlay);
+        mapController.setCenter(mLocationOverlay.getMyLocation());
 
     }
 
@@ -200,8 +206,14 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         }
     }
 
-    public void switchActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), NewPostActivity.class);
-        startActivity(intent);
+    public void buttonClick(View view) {
+        view.setBackgroundColor(Color.rgb(200,200,200));
+        newPostLocFlag =! newPostLocFlag;
+        if (newPostLocFlag) {
+            Toast.makeText(getBaseContext(), "Cliquer sur la carte pour placer le poste", Toast.LENGTH_LONG).show();
+            view.setBackgroundColor(Color.rgb(190,190,190));
+        }
+        else
+            view.setBackgroundColor(Color.rgb(213, 213, 213));
     }
 }

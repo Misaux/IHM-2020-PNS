@@ -41,40 +41,22 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:contentDescription="@string/images_to_post" />
 
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/images_to_post"
-                android:src="@drawable/ic_launcher_background" />
-
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/photo" />
-        </LinearLayout>
-
-        <LinearLayout
+        <Button
+            android:id="@+id/addPhoto"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-
-        </LinearLayout>
-
+            android:layout_height="wrap_content"
+            android:text="@string/photo" />
     </LinearLayout>
 
     <Button
