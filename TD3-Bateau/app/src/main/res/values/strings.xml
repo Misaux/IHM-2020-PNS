@@ -6,4 +6,6 @@
     <string name="titre">Titre</string>
     <string name="detail">Détail</string>
     <string name="valider">Valider</string>
+    <string name="replacePhoto">Remplacer la photo</string>
+    <string name="postListKey">MyPostList</string>
 </resources>

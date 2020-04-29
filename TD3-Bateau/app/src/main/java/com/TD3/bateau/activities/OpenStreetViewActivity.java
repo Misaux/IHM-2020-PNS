@@ -12,13 +12,17 @@ import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.TD3.bateau.Post;
 import com.TD3.bateau.R;
+import com.google.gson.Gson;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -37,6 +41,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.List;
 // essai de suivre le tuto : https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
 // et https://stackoverflow.com/questions/18302603/where-do-i-place-the-assets-folder-in-android-studio?rq=1
 
@@ -131,6 +136,8 @@ public class OpenStreetViewActivity extends AppCompatActivity {
             public boolean singleTapConfirmedHelper(GeoPoint p) {
                 //Toast.makeText(getBaseContext(),p.getLatitude() + " - "+p.getLongitude(),Toast.LENGTH_LONG).show();
                 if (newPostLocFlag) {
+                    newPostLocFlag = false;
+                    findViewById(R.id.addButton).setBackgroundColor(Color.rgb(213, 213, 213));
                     Intent intent = new Intent(getApplicationContext(), NewPostActivity.class);
                     intent.putExtra("lat", p.getLatitude());
                     intent.putExtra("lon", p.getLongitude());
@@ -152,12 +159,13 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         mOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(mOverlay);
         mapController.setCenter(mLocationOverlay.getMyLocation());
-
+        displayAllPosts();
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        displayAllPosts();
         //this will refresh the osmdroid configuration on resuming.
         //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -215,5 +223,15 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         }
         else
             view.setBackgroundColor(Color.rgb(213, 213, 213));
+    }
+
+    private void displayAllPosts(){
+        Gson gson = new Gson();
+        String json = MainActivity.mPrefs.getString(getResources().getString(R.string.postListKey), "");
+        List<Post> list = gson.fromJson(json, List.class);
+
+        for (Post post : list){
+            
+        }
     }
 }
