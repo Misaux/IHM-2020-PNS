@@ -83,7 +83,7 @@ public class NewPostActivity extends Activity {
         } else {
             post.setTitle(((EditText) findViewById(R.id.titleBox)).getText().toString());
             post.setComment(((EditText) findViewById(R.id.detailBox)).getText().toString());
-            post.setLocation(new GeoPoint(getIntent().getLongExtra("lat", 0), getIntent().getLongExtra("lon", 0)));
+            post.setLocation(new GeoPoint(getIntent().getDoubleExtra("lat", 0), getIntent().getDoubleExtra("lon", 0)));
 
             Gson gson = new Gson();
             String json = MainActivity.mPrefs.getString(getResources().getString(R.string.postListKey), "");

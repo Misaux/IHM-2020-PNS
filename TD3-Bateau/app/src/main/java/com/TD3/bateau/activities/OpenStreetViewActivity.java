@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat;
 import com.TD3.bateau.Post;
 import com.TD3.bateau.R;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -40,6 +41,7 @@ import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 // essai de suivre le tuto : https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
@@ -228,10 +230,31 @@ public class OpenStreetViewActivity extends AppCompatActivity {
     private void displayAllPosts(){
         Gson gson = new Gson();
         String json = MainActivity.mPrefs.getString(getResources().getString(R.string.postListKey), "");
-        List<Post> list = gson.fromJson(json, List.class);
+        Type type = new TypeToken<ArrayList<Post>>() {}.getType();
+        List<Post> list = gson.fromJson(json, type);
+        
 
+        ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
         for (Post post : list){
-            
+            OverlayItem item = new OverlayItem(post.getTitle(), post.getComment(), post.getLocation());
+            items.add(item);
         }
+
+        //the Place icons on the map with a click listener
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, items,
+                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                    @Override
+                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                        //do something
+                        return true;
+                    }
+                    @Override
+                    public boolean onItemLongPress(final int index, final OverlayItem item) {
+                        return false;
+                    }
+                });
+
+        mOverlay.setFocusItemsOnTap(true);
+        map.getOverlays().add(mOverlay);
     }
 }
