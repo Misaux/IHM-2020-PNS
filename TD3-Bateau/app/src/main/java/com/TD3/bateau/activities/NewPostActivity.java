@@ -8,9 +8,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +30,7 @@ public class NewPostActivity extends Activity {
     private static final int CAMERA_REQUEST = 1888;
     private ImageView imageView;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
+    private Spinner spinner;
     SharedPreferences mPrefs;
     Post post = new Post();
 
@@ -35,8 +38,13 @@ public class NewPostActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mPrefs = getPreferences(MODE_PRIVATE);
         setContentView(R.layout.new_post_layout);
+        spinner = findViewById(R.id.spinnerTheme);
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<>(NewPostActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.theme));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(myAdapter);
         this.imageView = this.findViewById(R.id.imageView1);
         Button photoButton = this.findViewById(R.id.addPhoto);
         photoButton.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +92,7 @@ public class NewPostActivity extends Activity {
             post.setTitle(((EditText) findViewById(R.id.titleBox)).getText().toString());
             post.setComment(((EditText) findViewById(R.id.detailBox)).getText().toString());
             post.setLocation(new GeoPoint(getIntent().getDoubleExtra("lat", 0), getIntent().getDoubleExtra("lon", 0)));
+            post.setTheme(spinner.getSelectedItem().toString());
 
             Gson gson = new Gson();
             String json = MainActivity.mPrefs.getString(getResources().getString(R.string.postListKey), "");

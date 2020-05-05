@@ -9,9 +9,14 @@ public class Post {
     private String title;
     private String comment;
     private GeoPoint location;
+    private String theme;
 
     public Bitmap getBitmap() {
         return bitmap;
+    }
+
+    public String getTheme() {
+        return theme;
     }
 
     public GeoPoint getLocation() {
@@ -24,6 +29,10 @@ public class Post {
 
     public String getTitle() {
         return title;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 
     public void setBitmap(Bitmap bitmap) {

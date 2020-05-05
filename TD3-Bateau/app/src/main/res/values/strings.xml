@@ -3,9 +3,18 @@
     <string name="photo">ajouter une photo</string>
     <string name="new_post">nouvelle publication</string>
     <string name="images_to_post">images to post</string>
-    <string name="titre">Titre</string>
-    <string name="detail">Détail</string>
+    <string name="titre">"  Titre"</string>
+    <string name="detail">"  Détail"</string>
     <string name="valider">Valider</string>
     <string name="replacePhoto">Remplacer la photo</string>
     <string name="postListKey">MyPostList</string>
+    <string name="th_me">Thème:</string>
+
+    <string-array name="theme">
+        <item>Autres</item>
+        <item>Bateau</item>
+        <item>Nageur</item>
+        <item>Poisson</item>
+        <item>Température</item>
+    </string-array>
 </resources>
