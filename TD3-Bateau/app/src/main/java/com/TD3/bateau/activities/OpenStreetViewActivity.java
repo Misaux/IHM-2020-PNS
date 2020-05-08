@@ -1,11 +1,9 @@
 package com.TD3.bateau.activities;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.TD3.bateau.Post;
 import com.TD3.bateau.R;
 import com.TD3.bateau.fragments.NewPostFragment;
+import com.TD3.bateau.fragments.PostDisplayFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -52,19 +51,13 @@ public class OpenStreetViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         mPrefs = getPreferences(MODE_PRIVATE);
 
+        /*SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
-        String json = mPrefs.getString(getResources().getString(R.string.postListKey), "");
-        List list = gson.fromJson(json, List.class);
-        if(list == null){
-            SharedPreferences.Editor prefsEditor = mPrefs.edit();
-            gson = new Gson();
-            json = gson.toJson(postList);
-            prefsEditor.putString(getResources().getString(R.string.postListKey), json);
-            prefsEditor.apply();
-        }
+        String json = gson.toJson(postList);
+        prefsEditor.putString(getResources().getString(R.string.postListKey), json);
+        prefsEditor.apply();*/
 
         /*LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -86,8 +79,8 @@ public class OpenStreetViewActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         //load/initialize the osmdroid configuration, this can be done
-        Configuration.getInstance().load(   getApplicationContext(),
-                                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()) );
+        Configuration.getInstance().load(getApplicationContext(),
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         //setting this before the layout is inflated is a good idea
         //it 'should' ensure that the map has a writable location for the map cache, even without permissions
         //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
@@ -105,14 +98,14 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         mapController = map.getController();
         mapController.setZoom(18.0);
 
-        requestPermissionsIfNecessary(new String[] {
+        requestPermissionsIfNecessary(new String[]{
                 // if you need to show the current location, uncomment the line below
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 // WRITE_EXTERNAL_STORAGE is required in order to show the map
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
 
-        this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()),map);
+        this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()), map);
         this.mLocationOverlay.enableMyLocation();
         this.mLocationOverlay.enableFollowLocation();
         map.getOverlays().add(this.mLocationOverlay);
@@ -127,14 +120,14 @@ public class OpenStreetViewActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putDouble("lat", p.getLatitude());
                     bundle.putDouble("lon", p.getLongitude());
-                    if (findViewById(R.id.newPost_fragment_container) != null){
+                    if (findViewById(R.id.post_fragment_container) != null) {
                         NewPostFragment newPostFragment = new NewPostFragment();
                         newPostFragment.setArguments(bundle);
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.add(R.id.newPost_fragment_container, newPostFragment);
+                        transaction.replace(R.id.post_fragment_container, newPostFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
-                        findViewById(R.id.newPost_fragment_container).setVisibility(View.VISIBLE);
+                        findViewById(R.id.post_fragment_container).setVisibility(View.VISIBLE);
                     }
                 }
                 return false;
@@ -155,7 +148,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         displayAllPosts();
         //this will refresh the osmdroid configuration on resuming.
@@ -166,13 +159,13 @@ public class OpenStreetViewActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         //this will refresh the osmdroid configuration on resuming.
         //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
-       map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+        map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
     }
 
     @Override
@@ -207,25 +200,25 @@ public class OpenStreetViewActivity extends AppCompatActivity {
     }
 
     public void buttonClick(View view) {
-        view.setBackgroundColor(Color.rgb(200,200,200));
-        newPostLocFlag =! newPostLocFlag;
+        view.setBackgroundColor(Color.rgb(200, 200, 200));
+        newPostLocFlag = !newPostLocFlag;
         if (newPostLocFlag) {
             Toast.makeText(getBaseContext(), "Cliquer sur la carte pour placer le poste", Toast.LENGTH_LONG).show();
-            view.setBackgroundColor(Color.rgb(190,190,190));
-        }
-        else
+            view.setBackgroundColor(Color.rgb(190, 190, 190));
+        } else
             view.setBackgroundColor(Color.rgb(213, 213, 213));
     }
 
-    public void displayAllPosts(){
+    public void displayAllPosts() {
         Gson gson = new Gson();
         String json = this.mPrefs.getString(getResources().getString(R.string.postListKey), "");
-        Type type = new TypeToken<ArrayList<Post>>() {}.getType();
-        List<Post> list = gson.fromJson(json, type);
-        
+        Type type = new TypeToken<ArrayList<Post>>() {
+        }.getType();
+        final List<Post> list = gson.fromJson(json, type);
+
 
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-        for (Post post : list){
+        for (Post post : list) {
             OverlayItem item = new OverlayItem(post.getTitle() + " (" + post.getTheme() + ")", post.getComment(), post.getLocation());
             items.add(item);
         }
@@ -235,12 +228,29 @@ public class OpenStreetViewActivity extends AppCompatActivity {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-
+                        Toast.makeText(getBaseContext(), "Restez appuyé pour afficher les détails", Toast.LENGTH_LONG).show();
                         return true;
                     }
+
                     @Override
                     public boolean onItemLongPress(final int index, final OverlayItem item) {
-                        return false;
+                            for (Post post : list) {
+                                if (post.getLocation().getLatitude() == item.getPoint().getLatitude() && post.getLocation().getLongitude() == item.getPoint().getLongitude()) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putDouble("lat", item.getPoint().getLatitude());
+                                    bundle.putDouble("lon", item.getPoint().getLongitude());
+                                    if (findViewById(R.id.post_fragment_container) != null) {
+                                        PostDisplayFragment postDisplayFragment = new PostDisplayFragment();
+                                        postDisplayFragment.setArguments(bundle);
+                                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                                        transaction.replace(R.id.post_fragment_container, postDisplayFragment);
+                                        transaction.addToBackStack(null);
+                                        transaction.commit();
+                                        findViewById(R.id.post_fragment_container).setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
+                        return true;
                     }
                 });
 

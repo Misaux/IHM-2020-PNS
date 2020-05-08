@@ -2,6 +2,8 @@ package com.TD3.bateau.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -28,6 +30,10 @@ import com.google.gson.Gson;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,9 +44,11 @@ public class NewPostFragment extends Fragment {
     private Spinner spinner;
     SharedPreferences mPrefs;
     Post post = new Post();
+    private ViewGroup container;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        this.container = container;
         View view = inflater.inflate(R.layout.new_post_layout, container, false);
         spinner = view.findViewById(R.id.spinnerTheme);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.theme));
@@ -75,6 +83,7 @@ public class NewPostFragment extends Fragment {
                         post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
                     }
                     post.setTheme(spinner.getSelectedItem().toString());
+                    post.setDate(Calendar.getInstance().getTime());
 
                     Gson gson = new Gson();
                     String json = mPrefs.getString(getResources().getString(R.string.postListKey), "");
@@ -89,6 +98,7 @@ public class NewPostFragment extends Fragment {
                     prefsEditor.apply();
 
                     container.setVisibility(View.INVISIBLE);
+                    getActivity().getSupportFragmentManager().popBackStack();
                     if (getActivity().getClass() == OpenStreetViewActivity.class){
                         ((OpenStreetViewActivity) getActivity()).displayAllPosts();
                     }
@@ -102,7 +112,7 @@ public class NewPostFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPrefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+        mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
     }
 
     @Override
@@ -124,7 +134,31 @@ public class NewPostFragment extends Fragment {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             imageView.setImageBitmap(photo);
-            post.setBitmap(photo);
+
+            ContextWrapper cw = new ContextWrapper(getContext());
+            // path to /data/data/yourapp/app_data/imageDir
+            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+            // Create imageDir
+            String bitmapName = Calendar.getInstance().getTime().getTime() + ".jpg";
+            File mypath=new File(directory,bitmapName);
+
+
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(mypath);
+                // Use the compress method on the BitMap object to write image to the OutputStream
+                photo.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            post.setBitmapName(directory.getAbsolutePath() + "/" + bitmapName);
+
             ((Button) getView().findViewById(R.id.addPhoto)).setText(R.string.replacePhoto);
         }
     }

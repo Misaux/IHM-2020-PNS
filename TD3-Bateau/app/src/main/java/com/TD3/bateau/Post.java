@@ -4,15 +4,19 @@ import android.graphics.Bitmap;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.util.Date;
+
 public class Post {
-    private Bitmap bitmap;
+    private String bitmapName;
     private String title;
     private String comment;
     private GeoPoint location;
     private String theme = "Autre";
+    Date date;
+    private int likeCount;
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    public String getBitmapName() {
+        return bitmapName;
     }
 
     public String getTheme() {
@@ -31,12 +35,28 @@ public class Post {
         return title;
     }
 
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public void setTheme(String theme) {
         this.theme = theme;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public void setBitmapName(String bitmapName) {
+        this.bitmapName = bitmapName;
     }
 
     public void setComment(String comment) {
