@@ -1,27 +1,24 @@
 package com.TD3.bateau.activities;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.TD3.bateau.Post;
 import com.TD3.bateau.R;
+import com.TD3.bateau.fragments.NewPostFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -34,10 +31,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.MapEventsOverlay;
-import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.compass.CompassOverlay;
-import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -48,6 +42,9 @@ import java.util.List;
 // et https://stackoverflow.com/questions/18302603/where-do-i-place-the-assets-folder-in-android-studio?rq=1
 
 public class OpenStreetViewActivity extends AppCompatActivity {
+    List<Post> postList = new ArrayList<>();
+    public static SharedPreferences mPrefs;
+
     private MapView map;
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MyLocationNewOverlay mLocationOverlay;
@@ -55,6 +52,20 @@ public class OpenStreetViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mPrefs = getPreferences(MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = mPrefs.getString(getResources().getString(R.string.postListKey), "");
+        List list = gson.fromJson(json, List.class);
+        if(list == null){
+            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+            gson = new Gson();
+            json = gson.toJson(postList);
+            prefsEditor.putString(getResources().getString(R.string.postListKey), json);
+            prefsEditor.apply();
+        }
+
         /*LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -106,33 +117,6 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         this.mLocationOverlay.enableFollowLocation();
         map.getOverlays().add(this.mLocationOverlay);
 
-        /*this.mCompassOverlay = new CompassOverlay(getApplicationContext(), new InternalCompassOrientationProvider(getApplicationContext()), map);
-        this.mCompassOverlay.enableCompass();
-        map.getOverlays().add(this.mCompassOverlay);*/
-
-        //create a new item to draw on the map
-        //your items
-        ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-        OverlayItem home = new OverlayItem("F. Rallo", "nos bureaux", new GeoPoint(43.65020,7.00517));
-        Drawable m = home.getMarker(0);
-
-        items.add(home); // Lat/Lon decimal degrees
-        items.add(new OverlayItem("Resto", "chez babar", new GeoPoint(43.64950,7.00517))); // Lat/Lon decimal degrees
-
-        //the Place icons on the map with a click listener
-        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, items,
-                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                    @Override
-                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        //do something
-                        return true;
-                    }
-                    @Override
-                    public boolean onItemLongPress(final int index, final OverlayItem item) {
-                        return false;
-                    }
-                });
-
         MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
@@ -140,10 +124,18 @@ public class OpenStreetViewActivity extends AppCompatActivity {
                 if (newPostLocFlag) {
                     newPostLocFlag = false;
                     findViewById(R.id.addButton).setBackgroundColor(Color.rgb(213, 213, 213));
-                    Intent intent = new Intent(getApplicationContext(), NewPostActivity.class);
-                    intent.putExtra("lat", p.getLatitude());
-                    intent.putExtra("lon", p.getLongitude());
-                    startActivity(intent);
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("lat", p.getLatitude());
+                    bundle.putDouble("lon", p.getLongitude());
+                    if (findViewById(R.id.newPost_fragment_container) != null){
+                        NewPostFragment newPostFragment = new NewPostFragment();
+                        newPostFragment.setArguments(bundle);
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.add(R.id.newPost_fragment_container, newPostFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                        findViewById(R.id.newPost_fragment_container).setVisibility(View.VISIBLE);
+                    }
                 }
                 return false;
             }
@@ -158,8 +150,6 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         MapEventsOverlay OverlayEvents = new MapEventsOverlay(getBaseContext(), mReceive);
         map.getOverlays().add(OverlayEvents);
 
-        mOverlay.setFocusItemsOnTap(true);
-        map.getOverlays().add(mOverlay);
         mapController.setCenter(mLocationOverlay.getMyLocation());
         displayAllPosts();
     }
@@ -227,16 +217,16 @@ public class OpenStreetViewActivity extends AppCompatActivity {
             view.setBackgroundColor(Color.rgb(213, 213, 213));
     }
 
-    private void displayAllPosts(){
+    public void displayAllPosts(){
         Gson gson = new Gson();
-        String json = MainActivity.mPrefs.getString(getResources().getString(R.string.postListKey), "");
+        String json = this.mPrefs.getString(getResources().getString(R.string.postListKey), "");
         Type type = new TypeToken<ArrayList<Post>>() {}.getType();
         List<Post> list = gson.fromJson(json, type);
         
 
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
         for (Post post : list){
-            OverlayItem item = new OverlayItem(post.getTitle(), post.getComment(), post.getLocation());
+            OverlayItem item = new OverlayItem(post.getTitle() + " (" + post.getTheme() + ")", post.getComment(), post.getLocation());
             items.add(item);
         }
 
@@ -245,7 +235,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        //do something
+
                         return true;
                     }
                     @Override

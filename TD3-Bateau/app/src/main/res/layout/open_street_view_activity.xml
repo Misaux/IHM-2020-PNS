@@ -50,4 +50,12 @@
                 </LinearLayout>
         </FrameLayout>
 
+        <FrameLayout
+            android:id="@+id/newPost_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+        </FrameLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -9,7 +9,7 @@ public class Post {
     private String title;
     private String comment;
     private GeoPoint location;
-    private String theme;
+    private String theme = "Autre";
 
     public Bitmap getBitmap() {
         return bitmap;
