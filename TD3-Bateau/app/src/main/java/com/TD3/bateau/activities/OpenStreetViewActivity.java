@@ -53,11 +53,11 @@ public class OpenStreetViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mPrefs = getPreferences(MODE_PRIVATE);
 
-        /*SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(postList);
         prefsEditor.putString(getResources().getString(R.string.postListKey), json);
-        prefsEditor.apply();*/
+        prefsEditor.apply();
 
         /*LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
