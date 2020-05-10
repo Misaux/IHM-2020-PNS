@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.TD3.bateau.Post;
@@ -31,11 +34,15 @@ import com.google.gson.Gson;
 import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+
+import static com.TD3.bateau.activities.ApplicationBateau.CHANNEL_ID;
 
 public class NewPostFragment extends Fragment {
     private static final int CAMERA_REQUEST = 1888;
@@ -43,8 +50,39 @@ public class NewPostFragment extends Fragment {
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     private Spinner spinner;
     SharedPreferences mPrefs;
+    private int notificationId = 0;
     Post post = new Post();
     private ViewGroup container;
+
+
+    private void sendNotificationOnChannel(String title, String content, Bitmap myBitmap, Post post, String channelId, int priority) {
+        if (myBitmap != null) {
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(this.getContext(), channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle(title + " a été posté !")
+                    .setContentText("Votre post est en ligne, avec cette photo")
+                    .setStyle(new NotificationCompat.BigPictureStyle()
+                            .bigPicture(myBitmap)
+                            .bigLargeIcon(myBitmap))
+                    .setPriority(priority);
+            NotificationManagerCompat.from(this.getContext()).notify(notificationId, notification.build());
+        } else {
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(this.getContext(), channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle(title + " a été posté !")
+                    .setContentText("Votre post est en ligne")
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText("Rappel de votre post \n" +
+                                    "Titre : "+ post.getTitle() +
+                                    "\nTheme : " + post.getTheme() +
+                                    "\nDétail : " + post.getComment())
+                    )
+                    .setPriority(priority);
+            NotificationManagerCompat.from(this.getContext()).notify(notificationId, notification.build());
+        }
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -100,10 +138,21 @@ public class NewPostFragment extends Fragment {
 
                     container.setVisibility(View.INVISIBLE);
                     getActivity().getSupportFragmentManager().popBackStack();
-                    if (getActivity().getClass() == OpenStreetViewActivity.class){
+                    if (getActivity().getClass() == OpenStreetViewActivity.class) {
                         ((OpenStreetViewActivity) getActivity()).displayAllPosts();
                     }
                 }
+                if (post.getBitmapName() != null) {
+                    try {
+                        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(new File(post.getBitmapName())));
+                        sendNotificationOnChannel(post.getTitle(), "", bitmap, post, CHANNEL_ID, NotificationCompat.PRIORITY_DEFAULT);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    sendNotificationOnChannel(post.getTitle(), "", null, post, CHANNEL_ID, NotificationCompat.PRIORITY_DEFAULT);
+                }
+
             }
         });
         return view;
@@ -141,7 +190,7 @@ public class NewPostFragment extends Fragment {
             File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
             // Create imageDir
             String bitmapName = Calendar.getInstance().getTime().getTime() + ".jpg";
-            File mypath=new File(directory,bitmapName);
+            File mypath = new File(directory, bitmapName);
 
 
             FileOutputStream fos = null;
