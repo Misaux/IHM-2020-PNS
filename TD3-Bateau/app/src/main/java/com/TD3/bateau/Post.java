@@ -14,6 +14,7 @@ public class Post {
     private String theme = "Autre";
     Date date;
     private int likeCount;
+    private long userID;
 
     public String getBitmapName() {
         return bitmapName;
@@ -39,6 +40,10 @@ public class Post {
         return likeCount;
     }
 
+    public long getUserID() {
+        return userID;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -49,6 +54,10 @@ public class Post {
 
     public void setTheme(String theme) {
         this.theme = theme;
+    }
+
+    public void setUserID(long userID) {
+        this.userID = userID;
     }
 
     public void setLikeCount(int likeCount) {

@@ -84,6 +84,7 @@ public class NewPostFragment extends Fragment {
                     }
                     post.setTheme(spinner.getSelectedItem().toString());
                     post.setDate(Calendar.getInstance().getTime());
+                    post.setUserID(getResources().getInteger(R.integer.userId));
 
                     Gson gson = new Gson();
                     String json = mPrefs.getString(getResources().getString(R.string.postListKey), "");

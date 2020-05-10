@@ -1,11 +1,13 @@
 package com.TD3.bateau.fragments;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,16 +30,42 @@ import java.util.List;
 public class PostDisplayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.post_display_layout, container, false);
+        final View view = inflater.inflate(R.layout.post_display_layout, container, false);
 
-        Gson gson = new Gson();
-        String json = OpenStreetViewActivity.mPrefs.getString(getResources().getString(R.string.postListKey), "");
+        final Gson gson = new Gson();
+        final String json = OpenStreetViewActivity.mPrefs.getString(getResources().getString(R.string.postListKey), "");
         Type type = new TypeToken<ArrayList<Post>>() {
         }.getType();
-        List<Post> list = gson.fromJson(json, type);
+        final List<Post> list = gson.fromJson(json, type);
 
-        for (Post post : list) {
+        for (final Post post : list) {
             if (post.getLocation().getLatitude() == getArguments().getDouble("lat") && post.getLocation().getLongitude() == getArguments().getDouble("lon")) {
+                Button button_suppr = view.findViewById(R.id.button_suppr);
+                if (post.getUserID() != getResources().getInteger(R.integer.userId)){
+                    view.findViewById(R.id.button_suppr).setVisibility(View.INVISIBLE);
+                }
+                else {
+                    button_suppr.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SharedPreferences.Editor prefsEditor = OpenStreetViewActivity.mPrefs.edit();
+
+                            list.remove(post);
+
+                            Gson gson = new Gson();
+                            String json = gson.toJson(list);
+                            prefsEditor.putString(getResources().getString(R.string.postListKey), json);
+                            prefsEditor.apply();
+
+                            container.setVisibility(View.INVISIBLE);
+                            getActivity().getSupportFragmentManager().popBackStack();
+                            if (getActivity().getClass() == OpenStreetViewActivity.class){
+                                ((OpenStreetViewActivity) getActivity()).displayAllPosts();
+                            }
+                        }
+                    });
+                }
+
                 ((TextView)view.findViewById(R.id.textView_title)).setText(post.getTitle());
                 ((TextView)view.findViewById(R.id.textView_theme)).setText(post.getTheme());
                 ((TextView)view.findViewById(R.id.textView_detail)).setText(post.getComment());

@@ -30,6 +30,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -59,34 +60,12 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         prefsEditor.putString(getResources().getString(R.string.postListKey), json);
         prefsEditor.apply();
 
-        /*LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Location locationNet = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);*/
-
-
         IMapController mapController;
-        ItemizedOverlayWithFocus<OverlayItem> mMyLocationOverlay;
 
         super.onCreate(savedInstanceState);
         //load/initialize the osmdroid configuration, this can be done
         Configuration.getInstance().load(getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
-        //setting this before the layout is inflated is a good idea
-        //it 'should' ensure that the map has a writable location for the map cache, even without permissions
-        //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
-        //see also StorageUtils
-        //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's tile servers will get you banned based on this string
-
         //inflate and create the map
         setContentView(R.layout.open_street_view_activity);
 
@@ -220,6 +199,20 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
         for (Post post : list) {
             OverlayItem item = new OverlayItem(post.getTitle() + " (" + post.getTheme() + ")", post.getComment(), post.getLocation());
+            switch (post.getTheme()){
+                case "Nageur":
+                    item.setMarker(getDrawable(R.drawable.nageur32x32));
+                    break;
+                case "Bateau":
+                    item.setMarker(getDrawable(R.drawable.bateau32x32));
+                    break;
+                case "Poisson":
+                    item.setMarker(getDrawable(R.drawable.poisson32x32));
+                    break;
+                case "Température":
+                    item.setMarker(getDrawable(R.drawable.temperature32x32));
+                    break;
+            }
             items.add(item);
         }
 
@@ -228,33 +221,40 @@ public class OpenStreetViewActivity extends AppCompatActivity {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        Toast.makeText(getBaseContext(), "Restez appuyé pour afficher les détails", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getBaseContext(), "Restez appuyé pour afficher les détails", Toast.LENGTH_LONG).show();
+
+                        for (Post post : list) {
+                            if (post.getLocation().getLatitude() == item.getPoint().getLatitude() && post.getLocation().getLongitude() == item.getPoint().getLongitude()) {
+                                Bundle bundle = new Bundle();
+                                bundle.putDouble("lat", item.getPoint().getLatitude());
+                                bundle.putDouble("lon", item.getPoint().getLongitude());
+                                if (findViewById(R.id.post_fragment_container) != null) {
+                                    PostDisplayFragment postDisplayFragment = new PostDisplayFragment();
+                                    postDisplayFragment.setArguments(bundle);
+                                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.post_fragment_container, postDisplayFragment);
+                                    transaction.addToBackStack(null);
+                                    transaction.commit();
+                                    findViewById(R.id.post_fragment_container).setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
                         return true;
                     }
 
                     @Override
                     public boolean onItemLongPress(final int index, final OverlayItem item) {
-                            for (Post post : list) {
-                                if (post.getLocation().getLatitude() == item.getPoint().getLatitude() && post.getLocation().getLongitude() == item.getPoint().getLongitude()) {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putDouble("lat", item.getPoint().getLatitude());
-                                    bundle.putDouble("lon", item.getPoint().getLongitude());
-                                    if (findViewById(R.id.post_fragment_container) != null) {
-                                        PostDisplayFragment postDisplayFragment = new PostDisplayFragment();
-                                        postDisplayFragment.setArguments(bundle);
-                                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                        transaction.replace(R.id.post_fragment_container, postDisplayFragment);
-                                        transaction.addToBackStack(null);
-                                        transaction.commit();
-                                        findViewById(R.id.post_fragment_container).setVisibility(View.VISIBLE);
-                                    }
-                                }
-                            }
+
                         return true;
                     }
                 });
 
         mOverlay.setFocusItemsOnTap(true);
+        for (Overlay overlay : map.getOverlays()){
+            if (overlay.getClass() == ItemizedOverlayWithFocus.class){
+                map.getOverlays().remove(overlay);
+            }
+        }
         map.getOverlays().add(mOverlay);
     }
 }
