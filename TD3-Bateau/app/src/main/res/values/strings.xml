@@ -17,4 +17,9 @@
         <item>Poisson</item>
         <item>Température</item>
     </string-array>
+
+    <string-array name="sort">
+        <item>plus récent</item>
+        <item>moins récent</item>
+    </string-array>
 </resources>

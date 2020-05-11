@@ -36,6 +36,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="#D5D5D5"
+                            android:onClick="buttonTimelineClick"
                             app:srcCompat="@android:drawable/ic_dialog_info" />
 
                         <ImageButton
@@ -45,7 +46,7 @@
                             android:layout_gravity="right"
                             android:layout_weight="1"
                             android:background="#D5D5D5"
-                            android:onClick="buttonClick"
+                            android:onClick="buttonPlusClick"
                             app:srcCompat="@drawable/zoom_in" />
                 </LinearLayout>
         </FrameLayout>

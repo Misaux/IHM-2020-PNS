@@ -1,6 +1,7 @@
 package com.TD3.bateau.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -36,7 +37,9 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.lang.reflect.Type;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 // essai de suivre le tuto : https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
 // et https://stackoverflow.com/questions/18302603/where-do-i-place-the-assets-folder-in-android-studio?rq=1
@@ -54,11 +57,20 @@ public class OpenStreetViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mPrefs = getPreferences(MODE_PRIVATE);
 
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
-        String json = gson.toJson(postList);
-        prefsEditor.putString(getResources().getString(R.string.postListKey), json);
-        prefsEditor.apply();
+        String json = this.mPrefs.getString(getResources().getString(R.string.postListKey), "");
+        Type type = new TypeToken<ArrayList<Post>>() {
+        }.getType();
+        List<Post> list = gson.fromJson(json, type);
+        if (list == null || list.size() == 0) {
+            postList.add(new Post("Eau chaude", "L'eau est franchement pas mal", new GeoPoint(43.100105499354115, 5.977206230163574), "Température", new Date(2020, 5, 4, 16, 5, 32), 132, 266241));
+
+            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+            gson = new Gson();
+            json = gson.toJson(postList);
+            prefsEditor.putString(getResources().getString(R.string.postListKey), json);
+            prefsEditor.apply();
+        }
 
         IMapController mapController;
 
@@ -178,7 +190,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         }
     }
 
-    public void buttonClick(View view) {
+    public void buttonPlusClick(View view) {
         view.setBackgroundColor(Color.rgb(200, 200, 200));
         newPostLocFlag = !newPostLocFlag;
         if (newPostLocFlag) {
@@ -186,6 +198,11 @@ public class OpenStreetViewActivity extends AppCompatActivity {
             view.setBackgroundColor(Color.rgb(190, 190, 190));
         } else
             view.setBackgroundColor(Color.rgb(213, 213, 213));
+    }
+
+    public void buttonTimelineClick(View view){
+        Intent intent = new Intent(this, TimelineActivity.class);
+        startActivity(intent);
     }
 
     public void displayAllPosts() {
@@ -198,7 +215,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
 
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
         for (Post post : list) {
-            OverlayItem item = new OverlayItem(post.getTitle() + " (" + post.getTheme() + ")", post.getComment(), post.getLocation());
+            OverlayItem item = new OverlayItem(post.getTitle() + " (" + post.getTheme() + ")", "", post.getLocation());
             switch (post.getTheme()){
                 case "Nageur":
                     item.setMarker(getDrawable(R.drawable.nageur32x32));

@@ -1,9 +1,13 @@
 package com.TD3.bateau;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Post {
@@ -15,6 +19,20 @@ public class Post {
     Date date;
     private int likeCount;
     private long userID;
+
+    public Post(){
+
+    }
+
+    public Post(String title, String comment, GeoPoint location, String theme, Date date, int likeCount, long userID){
+        this.title = title;
+        this.comment = comment;
+        this.location = location;
+        this.theme = theme;
+        this.date = date;
+        this.likeCount = likeCount;
+        this.userID = userID;
+    }
 
     public String getBitmapName() {
         return bitmapName;
