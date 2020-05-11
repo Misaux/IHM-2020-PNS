@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.TD3.bateau.activities.OpenStreetViewActivity;
+
 import java.util.List;
 
 public class CustomListAdapter extends BaseAdapter {
@@ -50,7 +52,7 @@ public class CustomListAdapter extends BaseAdapter {
         }
 
         Post post = this.listData.get(position);
-        holder.postTitle.setText(post.getTitle());
+        holder.postTitle.setText(post.getTitle() + "(" + (int)post.getLocation().distanceToAsDouble(OpenStreetViewActivity.mLocationOverlay.getMyLocation()) + "m)");
         holder.postDate.setText(post.getDate().toString().split("G")[0]);
 
         switch (post.getTheme()){

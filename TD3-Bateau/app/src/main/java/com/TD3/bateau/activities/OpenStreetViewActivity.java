@@ -50,7 +50,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
 
     private MapView map;
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private MyLocationNewOverlay mLocationOverlay;
+    public static MyLocationNewOverlay mLocationOverlay;
     private boolean newPostLocFlag = false;
 
     @Override
@@ -58,7 +58,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         mPrefs = getPreferences(MODE_PRIVATE);
 
         Gson gson = new Gson();
-        String json = this.mPrefs.getString(getResources().getString(R.string.postListKey), "");
+        String json = mPrefs.getString(getResources().getString(R.string.postListKey), "");
         Type type = new TypeToken<ArrayList<Post>>() {
         }.getType();
         List<Post> list = gson.fromJson(json, type);
@@ -96,10 +96,10 @@ public class OpenStreetViewActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
 
-        this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()), map);
-        this.mLocationOverlay.enableMyLocation();
-        this.mLocationOverlay.enableFollowLocation();
-        map.getOverlays().add(this.mLocationOverlay);
+        mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()), map);
+        mLocationOverlay.enableMyLocation();
+        mLocationOverlay.enableFollowLocation();
+        map.getOverlays().add(mLocationOverlay);
 
         MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
@@ -207,7 +207,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
 
     public void displayAllPosts() {
         Gson gson = new Gson();
-        String json = this.mPrefs.getString(getResources().getString(R.string.postListKey), "");
+        String json = mPrefs.getString(getResources().getString(R.string.postListKey), "");
         Type type = new TypeToken<ArrayList<Post>>() {
         }.getType();
         final List<Post> list = gson.fromJson(json, type);

@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.TD3.bateau.CustomListAdapter;
 import com.TD3.bateau.Post;
 import com.TD3.bateau.R;
+import com.TD3.bateau.SortByDistance;
 import com.TD3.bateau.fragments.PostDisplayFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -52,6 +53,16 @@ public class TimelineActivity extends AppCompatActivity {
                         Collections.reverse(inv);
                         listView.setAdapter(new CustomListAdapter(getApplicationContext(), inv));
                         break;
+                    case "plus proche":
+                        List temp = new ArrayList(){{addAll(list);}};
+                        Collections.sort(temp, new SortByDistance());
+                        listView.setAdapter(new CustomListAdapter(getApplicationContext(), temp));
+                        break;
+                    case "moins proche":
+                        List temp2 = new ArrayList(){{addAll(list);}};
+                        Collections.sort(temp2, new SortByDistance().reversed());
+                        listView.setAdapter(new CustomListAdapter(getApplicationContext(), temp2));
+                        break;
                 }
             }
 
@@ -87,6 +98,7 @@ public class TimelineActivity extends AppCompatActivity {
         }.getType();
         list = gson.fromJson(json, type);
 
+        ((Spinner)findViewById(R.id.spinner_post_sort)).setSelection(0);
         listView = findViewById(R.id.post_listview);
         listView.setAdapter(new CustomListAdapter(this, list));
     }

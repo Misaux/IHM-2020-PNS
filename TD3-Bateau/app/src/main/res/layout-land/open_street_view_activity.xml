@@ -37,7 +37,7 @@
                             android:layout_weight="1"
                             android:background="#D5D5D5"
                             android:onClick="buttonTimelineClick"
-                            app:srcCompat="@android:drawable/ic_dialog_info" />
+                            app:srcCompat="@drawable/ic_action_name" />
 
                         <ImageButton
                             android:id="@+id/addButton"
@@ -47,7 +47,7 @@
                             android:layout_weight="1"
                             android:background="#D5D5D5"
                             android:onClick="buttonPlusClick"
-                            app:srcCompat="@drawable/zoom_in" />
+                            app:srcCompat="@drawable/ic_action_plus" />
                 </LinearLayout>
         </FrameLayout>
 
