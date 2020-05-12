@@ -124,7 +124,7 @@ public class OpenStreetViewActivity extends AppCompatActivity implements Locatio
                 //Toast.makeText(getBaseContext(),p.getLatitude() + " - "+p.getLongitude(),Toast.LENGTH_LONG).show();
                 if (newPostLocFlag) {
                     newPostLocFlag = false;
-                    findViewById(R.id.addButton).setBackgroundColor(Color.rgb(213, 213, 213));
+                    findViewById(R.id.addButton).setBackgroundColor(Color.rgb(159, 159, 159));
                     Bundle bundle = new Bundle();
                     bundle.putDouble("lat", p.getLatitude());
                     bundle.putDouble("lon", p.getLongitude());
@@ -263,13 +263,13 @@ public class OpenStreetViewActivity extends AppCompatActivity implements Locatio
     }
 
     public void buttonPlusClick(View view) {
-        view.setBackgroundColor(Color.rgb(200, 200, 200));
+        view.setBackgroundColor(Color.rgb(159, 159, 159));
         newPostLocFlag = !newPostLocFlag;
         if (newPostLocFlag) {
             Toast.makeText(getBaseContext(), "Cliquer sur la carte pour placer le poste", Toast.LENGTH_LONG).show();
-            view.setBackgroundColor(Color.rgb(190, 190, 190));
+            view.setBackgroundColor(Color.rgb(80, 80, 80));
         } else
-            view.setBackgroundColor(Color.rgb(213, 213, 213));
+            view.setBackgroundColor(Color.rgb(159, 159, 159));
     }
 
     public void buttonTimelineClick(View view){

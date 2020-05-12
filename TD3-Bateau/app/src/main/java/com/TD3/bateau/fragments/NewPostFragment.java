@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -122,6 +124,20 @@ public class NewPostFragment extends Fragment {
                     }
                     post.setTheme(spinner.getSelectedItem().toString());
                     post.setDate(Calendar.getInstance().getTime());
+
+                    Calendar beginTime = Calendar.getInstance();
+                    Calendar endTime = Calendar.getInstance();
+                    endTime.set(Calendar.DAY_OF_MONTH,endTime.get(Calendar.DAY_OF_MONTH)+1);
+                    Intent intent = new Intent(Intent.ACTION_INSERT)
+                            .setData(CalendarContract.Events.CONTENT_URI)
+                            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                            .putExtra(CalendarContract.Events.TITLE, post.getTitle())
+                            .putExtra(CalendarContract.Events.DESCRIPTION, post.getComment())
+                            .putExtra(CalendarContract.Events.EVENT_LOCATION, String.valueOf(post.getLocation()))
+                            .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+                    startActivity(intent);
+
                     post.setUserID(getResources().getInteger(R.integer.userId));
 
                     Gson gson = new Gson();
