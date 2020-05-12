@@ -25,7 +25,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.MainActivity"/>
-        <activity android:name=".activities.TimelineActivity"/>
+        <activity android:name=".activities.TimelineActivity"
+            android:label="Bateau"
+            android:parentActivityName=".activities.OpenStreetViewActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.OpenStreetViewActivity"/>
+        </activity>
         <activity android:name=".fragments.NewPostFragment"/>
     </application>
 
