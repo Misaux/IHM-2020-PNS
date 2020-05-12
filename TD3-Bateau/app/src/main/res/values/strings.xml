@@ -8,6 +8,7 @@
     <string name="valider">Valider</string>
     <string name="replacePhoto">Remplacer la photo</string>
     <string name="postListKey">MyPostList</string>
+    <string name="beaconListKey">MyBeaconList</string>
     <string name="th_me">Thème:</string>
 
     <string-array name="theme">

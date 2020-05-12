@@ -140,6 +140,7 @@ public class NewPostFragment extends Fragment {
                     getActivity().getSupportFragmentManager().popBackStack();
                     if (getActivity().getClass() == OpenStreetViewActivity.class) {
                         ((OpenStreetViewActivity) getActivity()).displayAllPosts();
+                        ((OpenStreetViewActivity) getActivity()).displayAllBeacons();
                     }
                 }
                 if (post.getBitmapName() != null) {

@@ -65,9 +65,6 @@ public class CustomListAdapter extends BaseAdapter {
             case "Poisson":
                 holder.themeImage.setImageResource(R.drawable.poisson32x32);
                 break;
-            case "Température":
-                holder.themeImage.setImageResource(R.drawable.temperature32x32);
-                break;
             case "Autres":
                 holder.themeImage.setImageResource(R.drawable.marker_default);
                 break;

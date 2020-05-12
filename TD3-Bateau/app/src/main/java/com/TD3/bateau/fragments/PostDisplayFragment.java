@@ -62,6 +62,7 @@ public class PostDisplayFragment extends Fragment {
                             getActivity().getSupportFragmentManager().popBackStack();
                             if (getActivity().getClass() == OpenStreetViewActivity.class) {
                                 ((OpenStreetViewActivity) getActivity()).displayAllPosts();
+                                ((OpenStreetViewActivity) getActivity()).displayAllBeacons();
                             }
                             if (getActivity().getClass() == TimelineActivity.class) {
                                 ((TimelineActivity) getActivity()).loadList();
