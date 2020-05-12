@@ -61,7 +61,7 @@
     <EditText
         android:id="@+id/detailBox"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
+        android:layout_height="115dp"
         android:ems="10"
         android:hint="Détail"
         android:inputType="textMultiLine"
@@ -79,6 +79,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="175dp"
                 android:contentDescription="@string/images_to_post" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:text="Ajouter à l'agenda" />
 
             <Button
                 android:id="@+id/addPhoto"

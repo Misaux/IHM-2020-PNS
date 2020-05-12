@@ -1,7 +1,10 @@
 package com.TD3.bateau.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -9,9 +12,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -20,8 +26,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
+import android.content.ContentResolver;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
@@ -55,6 +62,7 @@ public class NewPostFragment extends Fragment {
     private int notificationId = 0;
     Post post = new Post();
     private ViewGroup container;
+    private boolean ajouterAgenda = false;
 
 
     private void sendNotificationOnChannel(String title, String content, Bitmap myBitmap, Post post, String channelId, int priority) {
@@ -75,7 +83,7 @@ public class NewPostFragment extends Fragment {
                     .setContentText("Votre post est en ligne")
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText("Rappel de votre post \n" +
-                                    "Titre : "+ post.getTitle() +
+                                    "Titre : " + post.getTitle() +
                                     "\nTheme : " + post.getTheme() +
                                     "\nDétail : " + post.getComment())
                     )
@@ -86,6 +94,7 @@ public class NewPostFragment extends Fragment {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         this.container = container;
@@ -108,8 +117,21 @@ public class NewPostFragment extends Fragment {
                 }
             }
         });
-
+        final Button boutonAgenda = view.findViewById(R.id.button);
         Button bt_valid = view.findViewById(R.id.bt_valid);
+        boutonAgenda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!ajouterAgenda) {
+                    ajouterAgenda=true;
+                    boutonAgenda.setBackgroundColor(Color.GRAY);
+                }
+                else {
+                    ajouterAgenda = false;
+                    boutonAgenda.setBackgroundColor(Color.WHITE);
+                }
+            }
+        });
         bt_valid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,18 +147,22 @@ public class NewPostFragment extends Fragment {
                     post.setTheme(spinner.getSelectedItem().toString());
                     post.setDate(Calendar.getInstance().getTime());
 
-                    Calendar beginTime = Calendar.getInstance();
-                    Calendar endTime = Calendar.getInstance();
-                    endTime.set(Calendar.DAY_OF_MONTH,endTime.get(Calendar.DAY_OF_MONTH)+1);
-                    Intent intent = new Intent(Intent.ACTION_INSERT)
-                            .setData(CalendarContract.Events.CONTENT_URI)
-                            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
-                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
-                            .putExtra(CalendarContract.Events.TITLE, post.getTitle())
-                            .putExtra(CalendarContract.Events.DESCRIPTION, post.getComment())
-                            .putExtra(CalendarContract.Events.EVENT_LOCATION, String.valueOf(post.getLocation()))
-                            .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
-                    startActivity(intent);
+
+                    if (ajouterAgenda) {
+                        Calendar beginTime = Calendar.getInstance();
+                        Calendar endTime = Calendar.getInstance();
+                        endTime.set(Calendar.DAY_OF_MONTH, endTime.get(Calendar.DAY_OF_MONTH) + 1);
+
+                        Intent intent = new Intent(Intent.ACTION_INSERT)
+                                .setData(CalendarContract.Events.CONTENT_URI)
+                                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                                .putExtra(CalendarContract.Events.TITLE, post.getTitle())
+                                .putExtra(CalendarContract.Events.DESCRIPTION, post.getComment())
+                                .putExtra(CalendarContract.Events.EVENT_LOCATION, String.valueOf(post.getLocation()))
+                                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+                        startActivity(intent);
+                    }
 
                     post.setUserID(getResources().getInteger(R.integer.userId));
 
