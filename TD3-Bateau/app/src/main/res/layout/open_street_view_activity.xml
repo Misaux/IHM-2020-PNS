@@ -19,23 +19,15 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="36dp"
                     android:orientation="horizontal">
-
-                        <ImageButton
-                            android:id="@+id/imageButton3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="#D5D5D5"
-                            app:srcCompat="@android:drawable/ic_dialog_map" />
 
                         <ImageButton
                             android:id="@+id/imageButton2"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:background="#D5D5D5"
+                            android:background="#9F9F9F"
                             android:onClick="buttonTimelineClick"
                             app:srcCompat="@drawable/ic_action_name" />
 
@@ -43,9 +35,9 @@
                             android:id="@+id/addButton"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_gravity="right"
+                            android:layout_gravity="end"
                             android:layout_weight="1"
-                            android:background="#D5D5D5"
+                            android:background="#9F9F9F"
                             android:onClick="buttonPlusClick"
                             app:srcCompat="@drawable/ic_action_plus" />
                 </LinearLayout>

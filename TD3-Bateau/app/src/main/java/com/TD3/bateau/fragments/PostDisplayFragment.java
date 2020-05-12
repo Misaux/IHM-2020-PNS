@@ -46,6 +46,7 @@ public class PostDisplayFragment extends Fragment {
                 if (post.getUserID() != getResources().getInteger(R.integer.userId)) {
                     view.findViewById(R.id.button_suppr).setVisibility(View.INVISIBLE);
                 } else {
+                    view.findViewById(R.id.toggleButton_like).setVisibility(View.INVISIBLE);
                     button_suppr.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
