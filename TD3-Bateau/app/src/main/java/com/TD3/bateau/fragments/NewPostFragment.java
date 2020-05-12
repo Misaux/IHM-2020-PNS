@@ -10,12 +10,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -27,7 +29,6 @@ import androidx.fragment.app.Fragment;
 
 import com.TD3.bateau.Post;
 import com.TD3.bateau.R;
-import com.TD3.bateau.activities.MainActivity;
 import com.TD3.bateau.activities.OpenStreetViewActivity;
 import com.google.gson.Gson;
 
@@ -88,12 +89,15 @@ public class NewPostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         this.container = container;
         View view = inflater.inflate(R.layout.new_post_layout, container, false);
-        spinner = view.findViewById(R.id.spinnerTheme);
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.theme));
-        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(myAdapter);
+
+        /* VERSION POST DETAILLE
+        //spinner = view.findViewById(R.id.spinnerTheme);
+        //ArrayAdapter<String> myAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.theme));
+        //myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //spinner.setAdapter(myAdapter);
 
         this.imageView = view.findViewById(R.id.imageView1);
+
         Button photoButton = view.findViewById(R.id.addPhoto);
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,11 +110,66 @@ public class NewPostFragment extends Fragment {
                 }
             }
         });
+        */
+        ImageButton boatButton = view.findViewById(R.id.boat_button);
+        ImageButton swimmerButton = view.findViewById(R.id.swimmer_button);
+        ImageButton fishButton = view.findViewById(R.id.fish_button);
+        ImageButton thermometreButton = view.findViewById(R.id.thermometre_button);
+
+        boatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                post.setTitle("Bateau(x) dans les alentours");
+                post.setComment("prudence");
+                post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+                post.setTheme("Bateau");
+                post.setDate(Calendar.getInstance().getTime());
+                post.setUserID(getResources().getInteger(R.integer.userId));
+            }
+        });
+
+        swimmerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                post.setTitle("Nageur(s) dans les alentours");
+                post.setComment("prudence");
+                post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+                post.setTheme("Nageur");
+                post.setDate(Calendar.getInstance().getTime());
+                post.setUserID(getResources().getInteger(R.integer.userId));
+            }
+        });
+
+        fishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                post.setTitle("Poisson(s) dans les alentours");
+                post.setComment("prudence");
+                post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+                post.setTheme("Poisson");
+                post.setDate(Calendar.getInstance().getTime());
+                post.setUserID(getResources().getInteger(R.integer.userId));
+            }
+        });
+
+        thermometreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                post.setTitle("Température ressentie");
+                post.setComment("");
+                post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+                post.setTheme("Température");
+                post.setDate(Calendar.getInstance().getTime());
+                post.setUserID(getResources().getInteger(R.integer.userId));
+            }
+        });
+
 
         Button bt_valid = view.findViewById(R.id.bt_valid);
         bt_valid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /* VERSION POST DETAILLEE
                 if (((EditText) getView().findViewById(R.id.titleBox)).getText() == null) {
                     Toast.makeText(getActivity().getBaseContext(), "Ajouter un titre", Toast.LENGTH_LONG).show();
                     return;
@@ -123,6 +182,8 @@ public class NewPostFragment extends Fragment {
                     post.setTheme(spinner.getSelectedItem().toString());
                     post.setDate(Calendar.getInstance().getTime());
                     post.setUserID(getResources().getInteger(R.integer.userId));
+                */
+                if( post.getTitle() == "Bateau" || post.getTitle() == "Nageur" || post.getTitle() == "Poisson" || post.getTitle() == "Température" ){
 
                     Gson gson = new Gson();
                     String json = mPrefs.getString(getResources().getString(R.string.postListKey), "");
@@ -138,20 +199,13 @@ public class NewPostFragment extends Fragment {
 
                     container.setVisibility(View.INVISIBLE);
                     getActivity().getSupportFragmentManager().popBackStack();
+                    Log.d("LOG", "putain !!!!!!!");
                     if (getActivity().getClass() == OpenStreetViewActivity.class) {
                         ((OpenStreetViewActivity) getActivity()).displayAllPosts();
                     }
                 }
-                if (post.getBitmapName() != null) {
-                    try {
-                        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(new File(post.getBitmapName())));
-                        sendNotificationOnChannel(post.getTitle(), "", bitmap, post, CHANNEL_ID, NotificationCompat.PRIORITY_DEFAULT);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } else {
                     sendNotificationOnChannel(post.getTitle(), "", null, post, CHANNEL_ID, NotificationCompat.PRIORITY_DEFAULT);
-                }
+
 
             }
         });

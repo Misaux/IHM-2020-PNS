@@ -89,6 +89,7 @@ public class OpenStreetViewActivity extends AppCompatActivity {
         this.mLocationOverlay.enableFollowLocation();
         map.getOverlays().add(this.mLocationOverlay);
 
+
         MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
@@ -179,13 +180,27 @@ public class OpenStreetViewActivity extends AppCompatActivity {
     }
 
     public void buttonClick(View view) {
-        view.setBackgroundColor(Color.rgb(200, 200, 200));
+        //view.setBackgroundColor(Color.rgb(200, 200, 200));
+        findViewById(R.id.addButton).setVisibility(View.INVISIBLE);
+        findViewById(R.id.addButton).setEnabled(false);
         newPostLocFlag = !newPostLocFlag;
         if (newPostLocFlag) {
-            Toast.makeText(getBaseContext(), "Cliquer sur la carte pour placer le poste", Toast.LENGTH_LONG).show();
-            view.setBackgroundColor(Color.rgb(190, 190, 190));
-        } else
-            view.setBackgroundColor(Color.rgb(213, 213, 213));
+            newPostLocFlag = false;
+            //findViewById(R.id.addButton).setBackgroundColor(Color.rgb(213, 213, 213));
+            Bundle bundle = new Bundle();
+            bundle.putDouble("lat", mLocationOverlay.getMyLocation().getLatitude());
+            bundle.putDouble("lon", mLocationOverlay.getMyLocation().getLongitude());
+            if (findViewById(R.id.post_fragment_container) != null) {
+                NewPostFragment newPostFragment = new NewPostFragment();
+                newPostFragment.setArguments(bundle);
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.post_fragment_container, newPostFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                findViewById(R.id.post_fragment_container).setVisibility(View.VISIBLE);
+            }
+        }
+        else view.setBackgroundColor(Color.rgb(213, 213, 213));
     }
 
     public void displayAllPosts() {
