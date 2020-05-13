@@ -87,11 +87,12 @@
                 android:contentDescription="@string/images_to_post" />
 
 
-            <Button
+            <ToggleButton
                 android:id="@+id/button"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Ajouter à l'agenda" />
+                android:layout_height="wrap_content"
+                android:textOff="Ajouter à l'agenda"
+                android:textOn="Ne pas ajouter à l'agenda"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
