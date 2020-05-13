@@ -38,8 +38,8 @@
         android:layout_marginLeft="105dp"
         android:layout_marginRight="105dp"
         android:background="@drawable/round_button"
-        android:onClick="buttonClick"
         android:clickable="true"
+        android:focusable="true"
         app:srcCompat="@drawable/bateau32x32" />
 
     <Space
