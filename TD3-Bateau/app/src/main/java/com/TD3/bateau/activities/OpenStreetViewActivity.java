@@ -224,8 +224,14 @@ public class OpenStreetViewActivity extends AppCompatActivity {
                 case "Poisson":
                     item.setMarker(getDrawable(R.drawable.poisson32x32));
                     break;
-                case "Température":
-                    item.setMarker(getDrawable(R.drawable.temperature32x32));
+                case "Rocher":
+                    item.setMarker(getDrawable(R.drawable.rochers));
+                    break;
+                case "Profondeur":
+                    item.setMarker(getDrawable(R.drawable.profondeur));
+                    break;
+                case "Dechet":
+                    item.setMarker(getDrawable(R.drawable.dechet));
                     break;
             }
             items.add(item);

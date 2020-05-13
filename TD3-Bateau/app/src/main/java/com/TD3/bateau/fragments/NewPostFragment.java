@@ -147,6 +147,9 @@ public class NewPostFragment extends Fragment {
             }
         });
         */
+        ImageButton trashButton = view.findViewById(R.id.trash_button);
+        ImageButton depthButton = view.findViewById(R.id.depth_button);
+        ImageButton rockButton = view.findViewById(R.id.rock_button);
 
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -160,7 +163,6 @@ public class NewPostFragment extends Fragment {
                 boatButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
                 swimmerButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
                 fishButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
-                thermometreButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
                 if (v.getId() == R.id.boat_button) {
                     boatButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
 
@@ -201,17 +203,13 @@ public class NewPostFragment extends Fragment {
             }
         };
 
-        ImageButton boatButton = view.findViewById(R.id.boat_button);
-        ImageButton swimmerButton = view.findViewById(R.id.swimmer_button);
         ImageButton fishButton = view.findViewById(R.id.fish_button);
-        ImageButton thermometreButton = view.findViewById(R.id.thermometre_button);
+        ImageButton swimmerButton = view.findViewById(R.id.swimmer_button);
+        ImageButton boatButton = view.findViewById(R.id.boat_button);
 
-        boatButton.setOnClickListener(onClickListener);
-        swimmerButton.setOnClickListener(onClickListener);
         fishButton.setOnClickListener(onClickListener);
-        thermometreButton.setOnClickListener(onClickListener);
-
-
+        swimmerButton.setOnClickListener(onClickListener);
+        boatButton.setOnClickListener(onClickListener);
         Button bt_valid = view.findViewById(R.id.bt_valid);
         bt_valid.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,7 +247,7 @@ public class NewPostFragment extends Fragment {
 
                     container.setVisibility(View.INVISIBLE);
                     getActivity().getSupportFragmentManager().popBackStack();
-                    Log.d("LOG", "putain !!!!!!!");
+                    //Log.d("LOG", "putain !!!!!!!");
                     sendNotificationOnChannel(post.getTitle(), "", null, post, CHANNEL_ID, NotificationCompat.PRIORITY_DEFAULT);
                     if (getActivity().getClass() == OpenStreetViewActivity.class) {
                         ((OpenStreetViewActivity) getActivity()).displayAllPosts();

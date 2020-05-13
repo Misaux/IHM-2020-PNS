@@ -38,7 +38,6 @@
         android:layout_marginLeft="105dp"
         android:layout_marginRight="105dp"
         android:background="@drawable/round_button"
-        android:backgroundTint="#CCCECE"
         android:onClick="buttonClick"
         android:clickable="true"
         app:srcCompat="@drawable/bateau32x32" />
@@ -54,7 +53,6 @@
         android:layout_marginLeft="105dp"
         android:layout_marginRight="105dp"
         android:background="@drawable/round_button"
-        android:backgroundTint="#CCCECE"
         android:clickable="true"
         app:srcCompat="@drawable/nageur32x32" />
 
@@ -69,7 +67,6 @@
         android:layout_marginLeft="105dp"
         android:layout_marginRight="105dp"
         android:background="@drawable/round_button"
-        android:backgroundTint="#CCCECE"
         android:clickable="true"
         app:srcCompat="@drawable/poisson32x32" />
 
@@ -78,15 +75,42 @@
         android:layout_height="13dp" />
 
     <ImageButton
-        android:id="@+id/thermometre_button"
+        android:id="@+id/rock_button"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginLeft="105dp"
         android:layout_marginRight="105dp"
         android:background="@drawable/round_button"
-        android:backgroundTint="#CCCECE"
         android:clickable="true"
-        app:srcCompat="@drawable/temperature32x32" />
+        app:srcCompat="@drawable/rochers" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="13dp" />
+
+    <ImageButton
+        android:id="@+id/depth_button"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="105dp"
+        android:layout_marginRight="105dp"
+        android:background="@drawable/round_button"
+        android:clickable="true"
+        app:srcCompat="@drawable/profondeur" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="13dp" />
+
+    <ImageButton
+        android:id="@+id/trash_button"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="105dp"
+        android:layout_marginRight="105dp"
+        android:background="@drawable/round_button"
+        android:clickable="true"
+        app:srcCompat="@drawable/dechet" />
 
     <Space
         android:layout_width="285dp"
