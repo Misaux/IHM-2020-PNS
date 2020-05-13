@@ -22,11 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.content.ContentResolver;
+import android.widget.ToggleButton;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -117,19 +120,12 @@ public class NewPostFragment extends Fragment {
                 }
             }
         });
-        final Button boutonAgenda = view.findViewById(R.id.button);
+        final ToggleButton boutonAgenda = view.findViewById(R.id.button);
         Button bt_valid = view.findViewById(R.id.bt_valid);
-        boutonAgenda.setOnClickListener(new View.OnClickListener() {
+        boutonAgenda.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (!ajouterAgenda) {
-                    ajouterAgenda=true;
-                    boutonAgenda.setBackgroundColor(Color.GRAY);
-                }
-                else {
-                    ajouterAgenda = false;
-                    boutonAgenda.setBackgroundColor(Color.WHITE);
-                }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ajouterAgenda = isChecked;
             }
         });
         bt_valid.setOnClickListener(new View.OnClickListener() {

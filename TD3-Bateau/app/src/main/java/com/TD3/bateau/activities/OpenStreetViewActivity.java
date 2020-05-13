@@ -74,6 +74,7 @@ public class OpenStreetViewActivity extends AppCompatActivity implements Locatio
         List<Post> list = gson.fromJson(json, type);
         if (list == null || list.size() == 0) {
             postList.add(new Post("Banc de poisson", "La pêche est bonne par ici!", new GeoPoint(43.100105499354115, 5.977206230163574), "Poisson", new Date(2020, 4, 12, 10, 5, 32), 132, 266241));
+            postList.add(new Post("Surfer", "Attention c'est Point Break", new GeoPoint(43.100081998016016, 5.97955584526062), "Nageur", new Date(2020, 5, 13, 15, 5, 32), 132, 266241));
 
             SharedPreferences.Editor prefsEditor = mPrefs.edit();
             gson = new Gson();
