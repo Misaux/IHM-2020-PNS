@@ -127,16 +127,15 @@ public class NewPostFragment extends Fragment {
                 ImageButton trashButton = getView().findViewById(R.id.trash_button);
 
 
-                boatButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
-                swimmerButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
-                fishButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
-                rockButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
-                depthButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
-                trashButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
+                boatButton.setBackground(getResources().getDrawable(R.drawable.round_button));
+                swimmerButton.setBackground(getResources().getDrawable(R.drawable.round_button));
+                fishButton.setBackground(getResources().getDrawable(R.drawable.round_button));
+                rockButton.setBackground(getResources().getDrawable(R.drawable.round_button));
+                depthButton.setBackground(getResources().getDrawable(R.drawable.round_button));
+                trashButton.setBackground(getResources().getDrawable(R.drawable.round_button));
 
                 if (v.getId() == R.id.boat_button) {
-                    boatButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
-
+                    boatButton.setBackground(getResources().getDrawable(R.drawable.round_button_dark));
                     post.setTitle("Bateau(x) dans les alentours");
                     post.setComment("prudence");
                     post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
@@ -145,7 +144,7 @@ public class NewPostFragment extends Fragment {
                     post.setUserID(getResources().getInteger(R.integer.userId));
                 }
                 if (v.getId() == R.id.swimmer_button) {
-                    swimmerButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
+                    swimmerButton.setBackground(getResources().getDrawable(R.drawable.round_button_dark));
                     post.setTitle("Nageur(s) dans les alentours");
                     post.setComment("prudence");
                     post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
@@ -154,7 +153,7 @@ public class NewPostFragment extends Fragment {
                     post.setUserID(getResources().getInteger(R.integer.userId));
                 }
                 if (v.getId() == R.id.fish_button) {
-                    fishButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
+                    fishButton.setBackground(getResources().getDrawable(R.drawable.round_button_dark));
                     post.setTitle("Poisson(s) dans les alentours");
                     post.setComment("prudence");
                     post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
@@ -163,7 +162,7 @@ public class NewPostFragment extends Fragment {
                     post.setUserID(getResources().getInteger(R.integer.userId));
                 }
                 if (v.getId() == R.id.rock_button) {
-                    rockButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
+                    rockButton.setBackground(getResources().getDrawable(R.drawable.round_button_dark));
                     post.setTitle("Rochers à proximité !");
                     post.setComment("Prudence !");
                     post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
@@ -172,7 +171,7 @@ public class NewPostFragment extends Fragment {
                     post.setUserID(getResources().getInteger(R.integer.userId));
                 }
                 if (v.getId() == R.id.depth_button) {
-                    rockButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
+                    depthButton.setBackground(getResources().getDrawable(R.drawable.round_button_dark));
                     post.setTitle("Faible profondeur dans cette zone !");
                     post.setComment("Prudence !");
                     post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
@@ -181,7 +180,7 @@ public class NewPostFragment extends Fragment {
                     post.setUserID(getResources().getInteger(R.integer.userId));
                 }
                 if (v.getId() == R.id.trash_button) {
-                    rockButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
+                    trashButton.setBackground(getResources().getDrawable(R.drawable.round_button_dark));
                     post.setTitle("Déchets à proximité !");
                     post.setComment("Prudence ! Récupérer les si possible.");
                     post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
