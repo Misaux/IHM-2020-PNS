@@ -8,7 +8,7 @@ import android.os.Build;
 import java.util.Objects;
 
 public class ApplicationBateau extends Application {
-    public static final String CHANNEL_ID = "TD3Bateau";
+    public static final String CHANNEL_ID = "Bateau";
     private static NotificationManager notificationManager;
 
 
@@ -29,8 +29,8 @@ public class ApplicationBateau extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        createNotificationChannel(  "channel Td3 bateau",
-                "Channel pour l'application td3 bateau",
-                NotificationManager.IMPORTANCE_DEFAULT );
+        createNotificationChannel(  "channel bateau",
+                "Channel pour l'application bateau",
+                NotificationManager.IMPORTANCE_HIGH );
     }
 }

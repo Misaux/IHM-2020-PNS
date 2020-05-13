@@ -65,6 +65,7 @@ public class NewPostFragment extends Fragment {
                     .setStyle(new NotificationCompat.BigPictureStyle()
                             .bigPicture(myBitmap)
                             .bigLargeIcon(myBitmap))
+                    .setUsesChronometer(true)
                     .setPriority(priority);
             NotificationManagerCompat.from(this.getContext()).notify(notificationId, notification.build());
         } else {
@@ -76,8 +77,8 @@ public class NewPostFragment extends Fragment {
                             .bigText("Rappel de votre post \n" +
                                     "Titre : "+ post.getTitle() +
                                     "\nTheme : " + post.getTheme() +
-                                    "\nDétail : " + post.getComment())
-                    )
+                                    "\nDétail : " + post.getComment()))
+                    .setUsesChronometer(true)
                     .setPriority(priority);
             NotificationManagerCompat.from(this.getContext()).notify(notificationId, notification.build());
         }
@@ -183,7 +184,10 @@ public class NewPostFragment extends Fragment {
                     post.setDate(Calendar.getInstance().getTime());
                     post.setUserID(getResources().getInteger(R.integer.userId));
                 */
-                if( post.getTitle() == "Bateau" || post.getTitle() == "Nageur" || post.getTitle() == "Poisson" || post.getTitle() == "Température" ){
+                if( post.getTitle().equals("")) {
+                    Toast.makeText(getActivity().getBaseContext(), "Cliquez sur l'évenement avant de valider", Toast.LENGTH_LONG).show();
+                    return;
+                } else {
 
                     Gson gson = new Gson();
                     String json = mPrefs.getString(getResources().getString(R.string.postListKey), "");
@@ -200,11 +204,13 @@ public class NewPostFragment extends Fragment {
                     container.setVisibility(View.INVISIBLE);
                     getActivity().getSupportFragmentManager().popBackStack();
                     Log.d("LOG", "putain !!!!!!!");
+                    sendNotificationOnChannel(post.getTitle(), "", null, post, CHANNEL_ID, NotificationCompat.PRIORITY_DEFAULT);
                     if (getActivity().getClass() == OpenStreetViewActivity.class) {
                         ((OpenStreetViewActivity) getActivity()).displayAllPosts();
+                        getActivity().findViewById(R.id.addButton).setVisibility(View.VISIBLE);
+                        getActivity().findViewById(R.id.addButton).setEnabled(true);
                     }
                 }
-                    sendNotificationOnChannel(post.getTitle(), "", null, post, CHANNEL_ID, NotificationCompat.PRIORITY_DEFAULT);
 
 
             }
@@ -218,7 +224,7 @@ public class NewPostFragment extends Fragment {
 
         mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
     }
-
+/*
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -266,4 +272,5 @@ public class NewPostFragment extends Fragment {
             ((Button) getView().findViewById(R.id.addPhoto)).setText(R.string.replacePhoto);
         }
     }
+    */
 }
