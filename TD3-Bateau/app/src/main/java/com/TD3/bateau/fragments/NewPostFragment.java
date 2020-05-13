@@ -86,6 +86,41 @@ public class NewPostFragment extends Fragment {
 
     }
 
+    public void onClick(View v) {
+        if (v.getId() == R.id.boat_button) {
+            post.setTitle("Bateau(x) dans les alentours");
+            post.setComment("prudence");
+            post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+            post.setTheme("Bateau");
+            post.setDate(Calendar.getInstance().getTime());
+            post.setUserID(getResources().getInteger(R.integer.userId));
+        }
+        if (v.getId() == R.id.boat_button) {
+            post.setTitle("Nageur(s) dans les alentours");
+            post.setComment("prudence");
+            post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+            post.setTheme("Nageur");
+            post.setDate(Calendar.getInstance().getTime());
+            post.setUserID(getResources().getInteger(R.integer.userId));
+        }
+        if (v.getId() == R.id.boat_button) {
+            post.setTitle("Poisson(s) dans les alentours");
+            post.setComment("prudence");
+            post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+            post.setTheme("Poisson");
+            post.setDate(Calendar.getInstance().getTime());
+            post.setUserID(getResources().getInteger(R.integer.userId));
+        }
+        if (v.getId() == R.id.boat_button) {
+            post.setTitle("Température ressentie");
+            post.setComment("");
+            post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+            post.setTheme("Température");
+            post.setDate(Calendar.getInstance().getTime());
+            post.setUserID(getResources().getInteger(R.integer.userId));
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         this.container = container;
@@ -112,58 +147,69 @@ public class NewPostFragment extends Fragment {
             }
         });
         */
+
+
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageButton boatButton = getView().findViewById(R.id.boat_button);
+                ImageButton swimmerButton = getView().findViewById(R.id.swimmer_button);
+                ImageButton fishButton = getView().findViewById(R.id.fish_button);
+                ImageButton thermometreButton = getView().findViewById(R.id.thermometre_button);
+
+                boatButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
+                swimmerButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
+                fishButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
+                thermometreButton.setBackgroundTintList(getResources().getColorStateList(R.color.base));
+                if (v.getId() == R.id.boat_button) {
+                    boatButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
+
+                    post.setTitle("Bateau(x) dans les alentours");
+                    post.setComment("prudence");
+                    post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+                    post.setTheme("Bateau");
+                    post.setDate(Calendar.getInstance().getTime());
+                    post.setUserID(getResources().getInteger(R.integer.userId));
+                }
+                if (v.getId() == R.id.swimmer_button) {
+                    swimmerButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
+                    post.setTitle("Nageur(s) dans les alentours");
+                    post.setComment("prudence");
+                    post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+                    post.setTheme("Nageur");
+                    post.setDate(Calendar.getInstance().getTime());
+                    post.setUserID(getResources().getInteger(R.integer.userId));
+                }
+                if (v.getId() == R.id.fish_button) {
+                    fishButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
+                    post.setTitle("Poisson(s) dans les alentours");
+                    post.setComment("prudence");
+                    post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+                    post.setTheme("Poisson");
+                    post.setDate(Calendar.getInstance().getTime());
+                    post.setUserID(getResources().getInteger(R.integer.userId));
+                }
+                if (v.getId() == R.id.thermometre_button) {
+                    thermometreButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
+                    post.setTitle("Température ressentie");
+                    post.setComment("");
+                    post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
+                    post.setTheme("Température");
+                    post.setDate(Calendar.getInstance().getTime());
+                    post.setUserID(getResources().getInteger(R.integer.userId));
+                }
+            }
+        };
+
         ImageButton boatButton = view.findViewById(R.id.boat_button);
         ImageButton swimmerButton = view.findViewById(R.id.swimmer_button);
         ImageButton fishButton = view.findViewById(R.id.fish_button);
         ImageButton thermometreButton = view.findViewById(R.id.thermometre_button);
 
-        boatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                post.setTitle("Bateau(x) dans les alentours");
-                post.setComment("prudence");
-                post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
-                post.setTheme("Bateau");
-                post.setDate(Calendar.getInstance().getTime());
-                post.setUserID(getResources().getInteger(R.integer.userId));
-            }
-        });
-
-        swimmerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                post.setTitle("Nageur(s) dans les alentours");
-                post.setComment("prudence");
-                post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
-                post.setTheme("Nageur");
-                post.setDate(Calendar.getInstance().getTime());
-                post.setUserID(getResources().getInteger(R.integer.userId));
-            }
-        });
-
-        fishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                post.setTitle("Poisson(s) dans les alentours");
-                post.setComment("prudence");
-                post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
-                post.setTheme("Poisson");
-                post.setDate(Calendar.getInstance().getTime());
-                post.setUserID(getResources().getInteger(R.integer.userId));
-            }
-        });
-
-        thermometreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                post.setTitle("Température ressentie");
-                post.setComment("");
-                post.setLocation(new GeoPoint(getArguments().getDouble("lat", 0), getArguments().getDouble("lon", 0)));
-                post.setTheme("Température");
-                post.setDate(Calendar.getInstance().getTime());
-                post.setUserID(getResources().getInteger(R.integer.userId));
-            }
-        });
+        boatButton.setOnClickListener(onClickListener);
+        swimmerButton.setOnClickListener(onClickListener);
+        fishButton.setOnClickListener(onClickListener);
+        thermometreButton.setOnClickListener(onClickListener);
 
 
         Button bt_valid = view.findViewById(R.id.bt_valid);
