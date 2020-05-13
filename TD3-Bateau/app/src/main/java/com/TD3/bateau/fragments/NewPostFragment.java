@@ -180,7 +180,7 @@ public class NewPostFragment extends Fragment {
                     post.setDate(Calendar.getInstance().getTime());
                     post.setUserID(getResources().getInteger(R.integer.userId));
                 }
-                if (v.getId() == R.id.rock_button) {
+                if (v.getId() == R.id.trash_button) {
                     rockButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker));
                     post.setTitle("Déchets à proximité !");
                     post.setComment("Prudence ! Récupérer les si possible.");
@@ -195,7 +195,6 @@ public class NewPostFragment extends Fragment {
         ImageButton boatButton = view.findViewById(R.id.boat_button);
         ImageButton swimmerButton = view.findViewById(R.id.swimmer_button);
         ImageButton fishButton = view.findViewById(R.id.fish_button);
-
         ImageButton rockButton = view.findViewById(R.id.rock_button);
         ImageButton depthButton = view.findViewById(R.id.depth_button);
         ImageButton trashButton = view.findViewById(R.id.trash_button);
