@@ -56,19 +56,7 @@ public class NewPostFragment extends Fragment {
     private ViewGroup container;
 
 
-    private void sendNotificationOnChannel(String title, String content, Bitmap myBitmap, Post post, String channelId, int priority) {
-        if (myBitmap != null) {
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(this.getContext(), channelId)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
-                    .setContentTitle(title + " a été posté !")
-                    .setContentText("Votre post est en ligne, avec cette photo")
-                    .setStyle(new NotificationCompat.BigPictureStyle()
-                            .bigPicture(myBitmap)
-                            .bigLargeIcon(myBitmap))
-                    .setUsesChronometer(true)
-                    .setPriority(priority);
-            NotificationManagerCompat.from(this.getContext()).notify(notificationId, notification.build());
-        } else {
+    private void sendNotificationOnChannel(String title, String content, Post post, String channelId, int priority) {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this.getContext(), channelId)
                     .setSmallIcon(R.drawable.ic_launcher_background)
                     .setContentTitle(title + " a été posté !")
@@ -81,8 +69,6 @@ public class NewPostFragment extends Fragment {
                     .setUsesChronometer(true)
                     .setPriority(priority);
             NotificationManagerCompat.from(this.getContext()).notify(notificationId, notification.build());
-        }
-
 
     }
 
@@ -242,7 +228,7 @@ public class NewPostFragment extends Fragment {
                     container.setVisibility(View.INVISIBLE);
                     getActivity().getSupportFragmentManager().popBackStack();
                     //Log.d("LOG", "putain !!!!!!!");
-                    sendNotificationOnChannel(post.getTitle(), "", null, post, CHANNEL_ID, NotificationCompat.PRIORITY_DEFAULT);
+                    sendNotificationOnChannel(post.getTitle(), "", post, CHANNEL_ID, NotificationCompat.PRIORITY_DEFAULT);
                     if (getActivity().getClass() == OpenStreetViewActivity.class) {
                         ((OpenStreetViewActivity) getActivity()).displayAllPosts();
                         getActivity().findViewById(R.id.addButton).setVisibility(View.VISIBLE);
