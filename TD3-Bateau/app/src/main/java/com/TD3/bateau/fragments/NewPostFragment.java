@@ -77,6 +77,7 @@ public class NewPostFragment extends Fragment {
                     .setStyle(new NotificationCompat.BigPictureStyle()
                             .bigPicture(myBitmap)
                             .bigLargeIcon(myBitmap))
+                    .setUsesChronometer(true)
                     .setPriority(priority);
             NotificationManagerCompat.from(this.getContext()).notify(notificationId, notification.build());
         } else {
@@ -90,6 +91,7 @@ public class NewPostFragment extends Fragment {
                                     "\nTheme : " + post.getTheme() +
                                     "\nDétail : " + post.getComment())
                     )
+                    .setUsesChronometer(true)
                     .setPriority(priority);
             NotificationManagerCompat.from(this.getContext()).notify(notificationId, notification.build());
         }
